@@ -8,7 +8,7 @@
     </head>
     <body>
         @include('inc.navbar')
-        <div class="container">
+        <div class="container card card-body bg-light p-3 mt-5">
             @yield('content')
         </div>
     </body>

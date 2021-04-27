@@ -1,4 +1,4 @@
-<nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
+<nav class="navbar navbar-expand-md navbar-dark bg-dark">
     <div class="container-fluid">
       <a class="navbar-brand" href="/">{{config('app.name', 'LARA-blog')}}</a>
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
@@ -14,6 +14,9 @@
           </li>
           <li class="nav-item">
             <a class="nav-link active" aria-current="page" href="/services">Services</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link active" aria-current="page" href="/posts">Blog</a>
           </li>
           <li class="nav-item">
             <a class="nav-link" href="#">Link</a>
