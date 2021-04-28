@@ -1,12 +1,20 @@
 @extends('layouts.app')
 
-@section('content')
-<p>Hello </p>
-
-{{-- <form method="POST" action="{{route('post.update',[$post->id])}}">
-    Title: <input type="text" name="post_title" value="{{$post->title}}">
-    Body: <input type="text" name="post_body" value="{{$post->body}}">
-    @csrf
-    <button type="submit">EDIT</button>
- </form> --}}
- @endsection
+ @section('content')  
+<h1>Edit Post</h1>
+<form method="POST" action="{{route('post.update',[$post->id])}}">
+    <div class="form-group">
+        Title: <input type="text" name="post_title" value="{{old('post_title')}}" placeholder="Title" class="form-control">
+    </div>
+    <div class="form-group">
+        Body: <textarea id="summernote" name="post_body"  value="{{old('post_body')}}" placeholder="Body Text" class="form-control"></textarea>
+    </div>    
+        @csrf
+        <button type="submit" class="btn btn-outline-secondary">EDIT</button>
+ </form>
+ <script>
+    $(document).ready(function() {
+       $('#summernote').summernote();
+     });
+</script>
+@endsection
