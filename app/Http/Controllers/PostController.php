@@ -15,7 +15,7 @@ class PostController extends Controller
      */
     public function index()
     {
-        $posts = Post::orderBy('created_at','desc')->paginate(10);
+        $posts = Post::orderBy('created_at','desc')->paginate(5);
        return view('post.index', ['posts' => $posts]);
 
     }
@@ -59,6 +59,7 @@ class PostController extends Controller
         $post = new Post;
         $post->title = $request->post_title;
         $post->body = $request->post_body;
+        $post->user_id = auth()->user()->id;
         $post->save();
         return redirect('/posts')->with('success', 'Post Created');        
         
@@ -96,10 +97,29 @@ class PostController extends Controller
      */
     public function update(Request $request, Post $post)
     {
+        $validator = Validator::make($request->all(),
+        [
+            'post_title' => ['required', 'min:3', 'max:64'],
+            'post_body' => ['required', 'min:3', 'max:200'],
+        ],
+        [
+            'post_title.required' => 'Title is required',
+            'post_title.min' => 'The title cannot be shorter than 3 characters',
+            'post_title.max' => 'The title cannot be longer than 64 characters',
+            'post_body.required' => 'Body text is required',
+            'post_body.min' => 'Body text cannot be shorter than 3 characters',
+            'post_body.max' => 'Body text cannot be longer than 200 characters'
+        ]
+        );
+        if ($validator->fails()) {
+            $request->flash();
+            return redirect()->back()->withErrors($validator);
+        }
+
         $post->title = $request->post_title;
         $post->body = $request->post_body;
         $post->save();
-        return redirect()->route('post.index'); 
+        return redirect('/posts')->with('success', 'Post Updated');
     }
 
     /**
@@ -110,6 +130,7 @@ class PostController extends Controller
      */
     public function destroy(Post $post)
     {
-        //
+        $post->delete();
+        return redirect('/posts')->with('success', 'Post Deleted');   
     }
 }

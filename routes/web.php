@@ -34,3 +34,6 @@ use App\Http\Controllers\PostController;
         Route::get('show/{post}', [PostController::class, 'show'])->name('post.show');
      });
      
+Auth::routes();
+
+Route::get('/dashboard', [App\Http\Controllers\DashboardController::class, 'index'])->name('dashboard');
