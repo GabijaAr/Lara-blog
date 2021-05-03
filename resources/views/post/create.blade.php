@@ -9,6 +9,9 @@
     <div class="form-group">
         Body: <textarea id="summernote" name="post_body"  value="{{old('post_body')}}" placeholder="Body Text" class="form-control"></textarea>
     </div>    
+    <div class="form-group">
+        
+    </div>
         @csrf
         <button type="submit" class="btn btn-outline-secondary">ADD</button>
  </form>

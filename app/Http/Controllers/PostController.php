@@ -8,6 +8,17 @@ use Validator;
 
 class PostController extends Controller
 {
+
+    /**
+     * Create a new controller instance.
+     *
+     * @return void
+     */
+    public function __construct()
+    {
+        $this->middleware('auth', ['except' => ['index', 'show']]);
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -85,6 +96,9 @@ class PostController extends Controller
     public function edit(Post $post)
     {
         $posts = Post::all();
+        if(auth()->user()->id !==$post->user_id){
+            return redirect('/posts')->with('error', 'Unauthorized Page');
+        }
         return view('post.edit', ['post' => $post, 'posts' => $posts]);
     }
 
@@ -130,6 +144,10 @@ class PostController extends Controller
      */
     public function destroy(Post $post)
     {
+        $posts = Post::all();
+        if(auth()->user()->id !==$post->user_id){
+            return redirect('/posts')->with('error', 'Unauthorized Page');   
+        }
         $post->delete();
         return redirect('/posts')->with('success', 'Post Deleted');   
     }

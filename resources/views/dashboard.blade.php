@@ -12,10 +12,9 @@
                             {{ session('status') }}
                         </div>
                     @endif
-                    {{ __('You are logged in!') }}
-                    <hr>
                     <a href="/posts/create" class="btn btn-outline-secondary mb-2">Create Post</a>
                     <h3>Your Blog Posts</h3>
+                    @if($posts->count() > 0)
                     <table class="table table-striped">
                         <tr>
                             <th>Title</th>
@@ -24,11 +23,20 @@
                         </tr>
                         @foreach($posts as $post)
                             <tr>
-                                <th>{{$post->title}}</th>
-                                <th><a href="/posts/{{$post->id}}/edit" class="btn btn-default"></a></th>
-                                <th></th>
+                                <td>{{$post->title}}</td>
+                                <td><a href="/posts/{{$post->id}}/edit" class="btn btn-outline-secondary">Edit</a></td>
+                                <td>
+                                    <form method="POST" action="{{route('post.destroy', [$post])}}">
+                                        @csrf
+                                        <button type="submit" class="btn btn-outline-success float-right">Delete</button>
+                                    </form> 
+                                </td>
                             </tr>
+                        @endforeach
                     </table>
+                    @else
+                    <p> You have no posts yet <p>
+                    @endif
                 </div>
             </div>
         </div>
