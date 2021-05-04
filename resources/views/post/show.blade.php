@@ -16,7 +16,10 @@
     </div>
         <h1 class="mt-5">{{$post->title}}</h1>
         <small>Written on {{$post->created_at}} by {{$post->user->name}}</small>
+        <img style="width:100%" src="/storage/images/{{$post->image}}" alt="#">
         <hr>
+        <br> <br>
+
             <div>
                 {!!$post->body!!}
             </div>

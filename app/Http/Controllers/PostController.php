@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Post;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 use Validator;
 
 class PostController extends Controller
@@ -53,6 +54,7 @@ class PostController extends Controller
         [
             'post_title' => ['required', 'min:3', 'max:64'],
             'post_body' => ['required', 'min:3', 'max:200'],
+            'image' => 'image|nullable|max:1999', 
         ],
         [
             'post_title.required' => 'Title is required',
@@ -67,10 +69,28 @@ class PostController extends Controller
             $request->flash();
             return redirect()->back()->withErrors($validator);
         }
+
+        // Handle File Upload
+        if($request->hasFile('image')){
+            // Get fileName with extension
+            $filenameWithExt = $request->file('image')->getClientOriginalName();
+            // Get just fileName
+            $filename = pathinfo($filenameWithExt, PATHINFO_FILENAME);
+            // Get just ext
+            $extension = $request->file('image')->getClientOriginalExtension();
+            // Filename to store
+            $fileNameToStore = $filename.'_'.time().'.'.$extension;
+            // Upload Image
+            $path = $request->file('image')->storeAs('public/images', $fileNameToStore);
+        } else{
+            $fileNameToStore = 'noimage.jpg';
+        }
+
         $post = new Post;
         $post->title = $request->post_title;
         $post->body = $request->post_body;
         $post->user_id = auth()->user()->id;
+        $post->image = $fileNameToStore;
         $post->save();
         return redirect('/posts')->with('success', 'Post Created');        
         
@@ -115,6 +135,7 @@ class PostController extends Controller
         [
             'post_title' => ['required', 'min:3', 'max:64'],
             'post_body' => ['required', 'min:3', 'max:200'],
+            'image' => 'image|nullable|max:1999', 
         ],
         [
             'post_title.required' => 'Title is required',
@@ -130,8 +151,25 @@ class PostController extends Controller
             return redirect()->back()->withErrors($validator);
         }
 
+        // Handle File Upload
+        if($request->hasFile('image')){
+            // Get fileName with extension
+            $filenameWithExt = $request->file('image')->getClientOriginalName();
+            // Get just fileName
+            $filename = pathinfo($filenameWithExt, PATHINFO_FILENAME);
+            // Get just ext
+            $extension = $request->file('image')->getClientOriginalExtension();
+            // Filename to store
+            $fileNameToStore = $filename.'_'.time().'.'.$extension;
+            // Upload Image
+            $path = $request->file('image')->storeAs('public/images', $fileNameToStore);
+        }
+
         $post->title = $request->post_title;
         $post->body = $request->post_body;
+        if($request->hasFile('image')){
+            $post->image = $fileNameToStore;
+        }
         $post->save();
         return redirect('/posts')->with('success', 'Post Updated');
     }
@@ -147,6 +185,11 @@ class PostController extends Controller
         $posts = Post::all();
         if(auth()->user()->id !==$post->user_id){
             return redirect('/posts')->with('error', 'Unauthorized Page');   
+        }
+
+        if($post->image != 'noimage.jpg'){
+            // delete image
+            Storage::delete('public/images/'.$post->image);
         }
         $post->delete();
         return redirect('/posts')->with('success', 'Post Deleted');   

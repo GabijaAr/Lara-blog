@@ -10,13 +10,16 @@
 </form>
 <h1 class="mt-2">Edit Post</h1>
 <div>
-<form method="POST" action="{{route('post.update',[$post->id])}}">
+<form method="POST" action="{{route('post.update',[$post->id])}}" enctype="multipart/form-data">
     <div class="form-group">
         Title: <input type="text" name="post_title" value="{{old('post_title', $post->title)}}" placeholder="Title" class="form-control">
     </div>
     <div class="form-group">
         Body: <textarea id="summernote" name="post_body"  placeholder="Body Text" class="form-control"> {{old('post_body', $post->body)}} </textarea>
-    </div>    
+    </div> 
+    <div class="form-group">
+        <input type="file" name="image">
+    </div>   
         @csrf
         <button type="submit" class="btn btn-outline-secondary float-right">EDIT</button>
  </form>

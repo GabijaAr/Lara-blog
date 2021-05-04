@@ -2,7 +2,7 @@
 
 @section('content')  
 <h1>Create Post</h1>
-<form method="POST" action="{{route('post.store')}}">
+<form method="POST" action="{{route('post.store')}}" enctype="multipart/form-data">
     <div class="form-group">
         Title: <input type="text" name="post_title" value="{{old('post_title')}}" placeholder="Title" class="form-control">
     </div>
@@ -10,7 +10,7 @@
         Body: <textarea id="summernote" name="post_body"  value="{{old('post_body')}}" placeholder="Body Text" class="form-control"></textarea>
     </div>    
     <div class="form-group">
-        
+        <input type="file" name="image">
     </div>
         @csrf
         <button type="submit" class="btn btn-outline-secondary">ADD</button>
